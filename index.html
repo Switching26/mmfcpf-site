@@ -257,10 +257,12 @@ footer a{color:#C3D3E9}
    <p>Quelques informations suffisent. Un conseiller vous recontacte rapidement pour faire le point sur vos droits et votre projet.</p>
   </div>
   <div class="form-card">
-   <!-- clé du service d'envoi à renseigner avant mise en ligne -->
-   <form action="https://api.web3forms.com/submit" method="POST">
-    <input type="hidden" name="access_key" value="CLE_A_RENSEIGNER">
-    <input type="hidden" name="subject" value="Nouvelle demande — Mes Meilleures Formations CPF">
+   <form action="https://formsubmit.co/contact@switchingformation.com" method="POST">
+    <input type="hidden" name="_subject" value="Nouvelle demande — Mes Meilleures Formations CPF">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://mesmeilleuresformationscpf.com/merci.html">
+    <input type="text" name="_honey" style="display:none">
     <div class="two">
      <div><label for="p">Prénom</label><input id="p" name="prenom" required></div>
      <div><label for="n">Nom</label><input id="n" name="nom" required></div>
