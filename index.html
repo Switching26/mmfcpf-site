@@ -257,12 +257,8 @@ footer a{color:#C3D3E9}
    <p>Quelques informations suffisent. Un conseiller vous recontacte rapidement pour faire le point sur vos droits et votre projet.</p>
   </div>
   <div class="form-card">
-   <form action="https://formsubmit.co/contact@switchingformation.com" method="POST">
-    <input type="hidden" name="_subject" value="Nouvelle demande — Mes Meilleures Formations CPF">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_next" value="https://mesmeilleuresformationscpf.com/merci.html">
-    <input type="text" name="_honey" style="display:none">
+   <form id="demande" novalidate>
+    <input type="text" name="_hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px">
     <div class="two">
      <div><label for="p">Prénom</label><input id="p" name="prenom" required></div>
      <div><label for="n">Nom</label><input id="n" name="nom" required></div>
@@ -296,8 +292,42 @@ footer a{color:#C3D3E9}
     <label for="m">Votre projet (facultatif)</label>
     <textarea id="m" name="message" rows="3" placeholder="Décrivez votre projet en quelques mots…"></textarea>
     <p class="rgpd">En envoyant ce formulaire, vous acceptez d'être recontacté(e) au sujet de votre projet de formation. Vos données servent uniquement à traiter votre demande, ne sont ni vendues ni cédées, et vous pouvez demander leur suppression à tout moment.</p>
-    <button class="btn" type="submit">Envoyer ma demande</button>
+    <button class="btn" type="submit" id="envoi">Envoyer ma demande</button>
+    <p id="err" style="display:none;margin-top:12px;color:#B00020;font-size:14px"></p>
    </form>
+   <script>
+   (function(){
+     var f = document.getElementById('demande'), b = document.getElementById('envoi'), err = document.getElementById('err');
+     f.addEventListener('submit', function(e){
+       e.preventDefault();
+       if (!f.reportValidity()) return;
+       if (f._hp.value) return;                         // piège à robots
+       b.disabled = true; b.textContent = 'Envoi en cours…'; err.style.display = 'none';
+       var d = new FormData(f);
+       var anc = d.get('anciennete') || '';
+       var msg = (d.get('message') || '').trim();
+       fetch('https://www.switching-formation.fr/api/submit', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({
+           source: 'mmfcpf',
+           prenom: d.get('prenom'), nom: d.get('nom'),
+           email: d.get('email'), tel: d.get('telephone'),
+           statut: d.get('situation'), secteur: d.get('formation'),
+           financement: 'CPF',
+           message: (anc ? 'Temps travaillé depuis 2015 : ' + anc + (msg ? '\n\n' : '') : '') + msg
+         })
+       })
+       .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+       .then(function(){ window.location.href = '/merci.html'; })
+       .catch(function(){
+         b.disabled = false; b.textContent = 'Envoyer ma demande';
+         err.textContent = "L'envoi n'a pas abouti. Réessayez, ou écrivez-nous directement à contact@switchingformation.com.";
+         err.style.display = 'block';
+       });
+     });
+   })();
+   </script>
   </div>
  </div>
 </section>
