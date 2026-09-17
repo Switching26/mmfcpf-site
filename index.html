@@ -121,6 +121,45 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--bleu);box-s
 .rgpd{font-size:12.5px;color:var(--encre2);margin:2px 0 20px;line-height:1.5}
 .form-card .btn{width:100%;padding:16px;font-size:15.5px}
 
+/* ---- formulaire par etapes ---- */
+.form-card{overflow:hidden}
+.et{display:none;animation:etIn .42s cubic-bezier(.16,1,.3,1)}
+.et.active{display:block}
+@keyframes etIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+.et-num{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9FB4D2;margin-bottom:9px}
+.et-q{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.3;margin:0 0 6px;color:var(--encre)}
+.et-aide{font-size:13.5px;color:var(--encre2);margin:0 0 16px;line-height:1.5}
+.et-q + .et-opts,.et-q + .two,.et-q + label{margin-top:18px}
+.et-opts{display:grid;gap:9px;margin-bottom:22px}
+.et-opt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:14px 16px;
+ border:1.5px solid var(--trait);border-radius:13px;background:#fff;color:var(--encre);
+ font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+ transition:border-color .2s,background .2s,transform .15s}
+.et-opt::before{content:"";width:17px;height:17px;border-radius:50%;border:2px solid #C8D6EA;flex:0 0 auto;transition:.2s}
+.et-opt:hover{border-color:var(--bleu);background:#F7FAFE}
+.et-opt:active{transform:scale(.985)}
+.et-opt.sel{border-color:var(--bleu);background:#EAF1FB}
+.et-opt.sel::before{border-color:var(--bleu);background:var(--bleu);box-shadow:inset 0 0 0 3.5px #fff}
+.et-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;min-height:44px}
+.et-back,.et-next,.et-send{font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;border-radius:11px;
+ border:0;padding:12px 18px;transition:.2s;background:none}
+.et-back{color:var(--encre2);padding-left:0}
+.et-back:hover{color:var(--bleu)}
+.et-next,.et-send{background:var(--bleu);color:#fff;padding:13px 26px}
+.et-next:hover,.et-send:hover{background:var(--bleu-fonce)}
+.et-send:disabled{opacity:.6;cursor:default}
+.pts{display:flex;gap:6px}
+.pts i{width:6px;height:6px;border-radius:50%;background:#D8E3F2;transition:.3s}
+.pts i.on{background:var(--bleu);width:20px;border-radius:4px}
+.et-err{min-height:18px;margin:-8px 0 12px;font-size:13.5px;color:#B00020}
+.et-ok{display:none;text-align:center;padding:30px 10px 22px;animation:etIn .5s cubic-bezier(.16,1,.3,1)}
+.et-ok.on{display:block}
+.et-ok svg{margin:0 auto 16px;display:block}
+.et-ok h3{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 8px;color:var(--encre)}
+.et-ok p{font-size:15px;color:var(--encre2);margin:0;line-height:1.6}
+.form-card .rgpd{margin:14px 0 18px}
+@media(min-width:700px){.et-opts{grid-template-columns:1fr 1fr}.et-q{font-size:23px}}
+
 /* ---- footer ---- */
 footer{background:var(--bleu-nuit);color:#9FB4D2;padding:44px 0 34px;font-size:14px}
 .f-grid{display:grid;gap:26px}
@@ -257,75 +296,145 @@ footer a{color:#C3D3E9}
    <p>Quelques informations suffisent. Un conseiller vous recontacte rapidement pour faire le point sur vos droits et votre projet.</p>
   </div>
   <div class="form-card">
-   <form id="demande" novalidate>
+   <form id="demande" autocomplete="on" onsubmit="return false" novalidate>
     <input type="text" name="_hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px">
-    <div class="two">
-     <div><label for="p">Prénom</label><input id="p" name="prenom" required></div>
-     <div><label for="n">Nom</label><input id="n" name="nom" required></div>
+
+    <div class="et active" data-et="1">
+     <div class="et-num">Étape 1 sur 5</div>
+     <div class="et-q">Quelle formation vous intéresse ?</div>
+     <div class="et-opts">
+      <button type="button" class="et-opt">Intelligence artificielle</button>
+      <button type="button" class="et-opt">Bureautique</button>
+      <button type="button" class="et-opt">Langues étrangères</button>
+      <button type="button" class="et-opt">Comptabilité &amp; finances</button>
+      <button type="button" class="et-opt">Graphisme &amp; multimédia</button>
+      <button type="button" class="et-opt">Internet &amp; création web</button>
+      <button type="button" class="et-opt">Commerce, vente &amp; marketing</button>
+      <button type="button" class="et-opt">Je ne sais pas encore</button>
+     </div>
+     <div class="et-nav"><span></span><div class="pts"><i class="on"></i><i></i><i></i><i></i><i></i></div><span></span></div>
     </div>
-    <div class="two">
-     <div><label for="e">E-mail</label><input id="e" type="email" name="email" required></div>
-     <div><label for="t">Téléphone</label><input id="t" type="tel" name="telephone" required></div>
+
+    <div class="et" data-et="2">
+     <div class="et-num">Étape 2 sur 5</div>
+     <div class="et-q">Quelle est votre situation ?</div>
+     <div class="et-opts">
+      <button type="button" class="et-opt">Salarié(e) du secteur privé</button>
+      <button type="button" class="et-opt">Agent de la fonction publique</button>
+      <button type="button" class="et-opt">Demandeur d'emploi</button>
+      <button type="button" class="et-opt">Travailleur indépendant</button>
+      <button type="button" class="et-opt">Étudiant(e)</button>
+      <button type="button" class="et-opt">Retraité(e)</button>
+      <button type="button" class="et-opt">Autre</button>
+     </div>
+     <div class="et-nav"><button type="button" class="et-back">← Retour</button><div class="pts"><i></i><i class="on"></i><i></i><i></i><i></i></div><span></span></div>
     </div>
-    <label for="s">Votre situation</label>
-    <select id="s" name="situation" required>
-     <option value="">Choisir…</option>
-     <option>Salarié(e) du secteur privé</option><option>Agent de la fonction publique</option>
-     <option>Demandeur d'emploi</option><option>Travailleur indépendant</option>
-     <option>Étudiant(e)</option><option>Retraité(e)</option><option>Autre</option>
-    </select>
-    <label for="a">Temps travaillé depuis 2015</label>
-    <select id="a" name="anciennete" required>
-     <option value="">Choisir…</option>
-     <option>Je n'ai pas travaillé</option><option>Moins de 2 ans</option>
-     <option>Entre 2 et 5 ans</option><option>Plus de 5 ans</option>
-    </select>
-    <label for="f">Formation souhaitée</label>
-    <select id="f" name="formation" required>
-     <option value="">Choisir…</option>
-     <option>Intelligence artificielle</option><option>Bureautique</option><option>Langues étrangères</option>
-     <option>Comptabilité &amp; finances</option><option>Graphisme &amp; multimédia</option>
-     <option>Internet &amp; création web</option><option>Commerce, vente &amp; marketing</option>
-     
-          <option>Je ne sais pas encore</option>
-    </select>
-    <label for="m">Votre projet (facultatif)</label>
-    <textarea id="m" name="message" rows="3" placeholder="Décrivez votre projet en quelques mots…"></textarea>
-    <p class="rgpd">En envoyant ce formulaire, vous acceptez d'être recontacté(e) au sujet de votre projet de formation. Vos données servent uniquement à traiter votre demande, ne sont ni vendues ni cédées, et vous pouvez demander leur suppression à tout moment.</p>
-    <button class="btn" type="submit" id="envoi">Envoyer ma demande</button>
-    <p id="err" style="display:none;margin-top:12px;color:#B00020;font-size:14px"></p>
+
+    <div class="et" data-et="3">
+     <div class="et-num">Étape 3 sur 5</div>
+     <div class="et-q">Depuis 2015, combien de temps avez-vous travaillé ?</div>
+     <p class="et-aide">Cela nous aide à estimer vos droits CPF.</p>
+     <div class="et-opts">
+      <button type="button" class="et-opt">Je n'ai pas travaillé</button>
+      <button type="button" class="et-opt">Moins de 2 ans</button>
+      <button type="button" class="et-opt">Entre 2 et 5 ans</button>
+      <button type="button" class="et-opt">Plus de 5 ans</button>
+     </div>
+     <div class="et-nav"><button type="button" class="et-back">← Retour</button><div class="pts"><i></i><i></i><i class="on"></i><i></i><i></i></div><span></span></div>
+    </div>
+
+    <div class="et" data-et="4">
+     <div class="et-num">Étape 4 sur 5</div>
+     <div class="et-q">Vos coordonnées</div>
+     <div class="two">
+      <div><label for="p">Prénom</label><input id="p" name="prenom" autocomplete="given-name" autocapitalize="words" required></div>
+      <div><label for="n">Nom</label><input id="n" name="nom" autocomplete="family-name" autocapitalize="words" required></div>
+     </div>
+     <label for="e">E-mail</label>
+     <input id="e" type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+     <label for="t">Téléphone</label>
+     <input id="t" type="tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78" required>
+     <p id="err" class="et-err"></p>
+     <div class="et-nav"><button type="button" class="et-back">← Retour</button><div class="pts"><i></i><i></i><i></i><i class="on"></i><i></i></div><button type="button" class="et-next" id="suite">Suivant →</button></div>
+    </div>
+
+    <div class="et" data-et="5">
+     <div class="et-num">Étape 5 sur 5</div>
+     <div class="et-q">Un mot sur votre projet ?</div>
+     <p class="et-aide">Facultatif — vous pouvez envoyer directement.</p>
+     <textarea id="m" name="message" rows="3" placeholder="Décrivez votre projet en quelques mots…"></textarea>
+     <p class="rgpd">En envoyant ce formulaire, vous acceptez d'être recontacté(e) au sujet de votre projet de formation. Vos données servent uniquement à traiter votre demande, ne sont ni vendues ni cédées, et vous pouvez demander leur suppression à tout moment.</p>
+     <div class="et-nav"><button type="button" class="et-back">← Retour</button><div class="pts"><i></i><i></i><i></i><i></i><i class="on"></i></div><button type="button" class="et-send" id="envoi">Envoyer</button></div>
+    </div>
+
+    <div class="et-ok" id="ok">
+     <svg viewBox="0 0 52 52" width="58" height="58" aria-hidden="true">
+      <circle cx="26" cy="26" r="25" fill="#EAF1FB"></circle>
+      <path d="M16 26.5l7 7 13-13" fill="none" stroke="#1B4F9C" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path>
+     </svg>
+     <h3>Envoyé !</h3>
+     <p>Nous vous contacterons rapidement pour faire le point sur vos droits.</p>
+    </div>
    </form>
    <script>
    (function(){
-     var f = document.getElementById('demande'), b = document.getElementById('envoi'), err = document.getElementById('err');
-     f.addEventListener('submit', function(e){
-       e.preventDefault();
-       if (!f.reportValidity()) return;
-       if (f._hp.value) return;                         // piège à robots
-       b.disabled = true; b.textContent = 'Envoi en cours…'; err.style.display = 'none';
-       var d = new FormData(f);
-       var anc = d.get('anciennete') || '';
-       var msg = (d.get('message') || '').trim();
-       fetch('https://www.switching-formation.fr/api/submit', {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({
-           source: 'mmfcpf',
-           prenom: d.get('prenom'), nom: d.get('nom'),
-           email: d.get('email'), tel: d.get('telephone'),
-           statut: d.get('situation'), secteur: d.get('formation'),
-           financement: 'CPF',
-           message: (anc ? 'Temps travaillé depuis 2015 : ' + anc + (msg ? '\n\n' : '') : '') + msg
-         })
-       })
-       .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
-       .then(function(){ window.location.href = '/merci.html'; })
-       .catch(function(){
-         b.disabled = false; b.textContent = 'Envoyer ma demande';
-         err.textContent = "L'envoi n'a pas abouti. Réessayez, ou écrivez-nous directement à contact@switchingformation.com.";
-         err.style.display = 'block';
-       });
+    var f=document.getElementById('demande'), cur=1, TOT=5;
+    var rep={1:'',2:'',3:''};
+    function va(n){
+     if(n<1||n>TOT) return;
+     var a=f.querySelector('.et[data-et="'+cur+'"]'), b=f.querySelector('.et[data-et="'+n+'"]');
+     a.classList.remove('active'); b.classList.add('active'); cur=n;
+     var y=f.getBoundingClientRect().top+window.scrollY-90;
+     if(window.scrollY>y) window.scrollTo({top:y,behavior:'smooth'});
+     var pr=b.querySelector('input'); if(pr) setTimeout(function(){pr.focus({preventScroll:true})},260);
+    }
+    f.querySelectorAll('.et-opt').forEach(function(b){
+     b.addEventListener('click',function(){
+      var et=b.closest('.et'), i=+et.dataset.et;
+      et.querySelectorAll('.et-opt').forEach(function(o){o.classList.remove('sel')});
+      b.classList.add('sel'); rep[i]=b.textContent.trim();
+      setTimeout(function(){va(i+1)},240);
      });
+    });
+    f.querySelectorAll('.et-back').forEach(function(b){ b.addEventListener('click',function(){va(cur-1)}); });
+    var err=document.getElementById('err');
+    function valide(){
+     var c=['p','n','e','t'].map(function(id){return document.getElementById(id)});
+     for(var i=0;i<c.length;i++){
+      if(!c[i].value.trim()){ err.textContent='Merci de compléter ce champ.'; c[i].focus(); return false; }
+     }
+     if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(c[2].value.trim())){ err.textContent="Cette adresse e-mail semble incomplète."; c[2].focus(); return false; }
+     if(c[3].value.replace(/\D/g,'').length<9){ err.textContent="Ce numéro semble incomplet."; c[3].focus(); return false; }
+     err.textContent=''; return true;
+    }
+    document.getElementById('suite').addEventListener('click',function(){ if(valide()) va(5); });
+    document.getElementById('envoi').addEventListener('click',function(){
+     if(f._hp.value) return;
+     var b=this; b.disabled=true; b.textContent='Envoi…';
+     fetch('https://www.switching-formation.fr/api/submit',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+       source:'mmfcpf',
+       prenom:document.getElementById('p').value.trim(),
+       nom:document.getElementById('n').value.trim(),
+       email:document.getElementById('e').value.trim(),
+       tel:document.getElementById('t').value.trim(),
+       secteur:rep[1], statut:rep[2], anciennete:rep[3],
+       financement:'CPF',
+       message:document.getElementById('m').value.trim()
+      })
+     })
+     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+     .then(function(){
+      f.querySelector('.et.active').classList.remove('active');
+      document.getElementById('ok').classList.add('on');
+     })
+     .catch(function(){
+      b.disabled=false; b.textContent='Envoyer';
+      err.textContent="L'envoi n'a pas abouti. Réessayez dans un instant.";
+      f.querySelector('.et[data-et="4"] .et-err').textContent=err.textContent;
+     });
+    });
    })();
    </script>
   </div>
